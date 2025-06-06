@@ -9,12 +9,18 @@ app = FastAPI()
 class QuestionRequest(BaseModel):
     question: str
     model: str
+    llm: str
+    domain:str
+    style: str
+    lan:str
 
 @app.post("/question")
 async def question(request: QuestionRequest):
     if request.model == "openai":
-        answer = await call_open_ai_model(request.question)
+        print("openai")
+        answer = await call_open_ai_model(request.question,request.llm,request.style,request.domain,request.lan)
     else:
+        print("gemini")
         answer = await call_gemini_model(request.question)
         
     return {"answer": answer}
