@@ -13,14 +13,16 @@ class QuestionRequest(BaseModel):
     domain:str
     style: str
     lan:str
+    detail_level:str
+    
 
 @app.post("/question")
 async def question(request: QuestionRequest):
     if request.model == "openai":
         print("openai")
-        answer = await call_open_ai_model(request.question,request.llm,request.style,request.domain,request.lan)
+        answer = await call_open_ai_model(request.question,request.llm,request.style,request.domain,request.lan,request.detail_level)
     else:
         print("gemini")
-        answer = await call_gemini_model(request.question)
+        answer = await call_gemini_model(request.question,request.llm,request.style,request.domain,request.lan,request.detail_level)
         
     return {"answer": answer}
